@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    DOCKER_REGISTRY = 'your-dockerhub-username'
+    DOCKER_REGISTRY = 'reddi122'
   }
 
   stages {
@@ -25,11 +25,13 @@ pipeline {
 
     stage('Push Docker Images') {
       steps {
-        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
           sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
-          def services = ['frontend', 'home-service', 'cart-service', 'fashion-service']
-          for (service in services) {
-            sh "docker push $DOCKER_REGISTRY/${service}:latest"
+          script {
+            def services = ['frontend', 'home-service', 'cart-service', 'fashion-service']
+            for (service in services) {
+              sh "docker push $DOCKER_REGISTRY/${service}:latest"
+            }
           }
         }
       }
