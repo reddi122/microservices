@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-service
+  namespace: microservices-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home-service
+  template:
+    metadata:
+      labels:
+        app: home-service
+    spec:
+      containers:
+        - name: home-service
+          image: home-service:latest
+          ports:
+            - containerPort: 5001

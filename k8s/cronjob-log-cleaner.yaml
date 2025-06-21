@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: log-cleaner
+  namespace: microservices-app
+spec:
+  schedule: "0 0 * * *"  # daily at midnight
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: log-cleaner
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - "find /var/log -type f -name '*.log' -mtime +7 -delete"
+          restartPolicy: OnFailure
